@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Анімація з керуванням</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #box {
+      width: 100px;
+      height: 100px;
+      background-color: crimson;
+      border-radius: 15px;
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      transform: translateY(-50%);
+      transition: background-color 0.3s;
+    }
+
+    .controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 0 5px;
+      border: none;
+      border-radius: 10px;
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="box"></div>
+
+  <div class="controls">
+    <button id="startBtn">~ Старт</button>
+    <button id="stopBtn"> Стоп</button>
+    <button id="colorBtn"> Змінити колір</button>
+  </div>
+
+  <script>
+    // === Отримуємо елементи з HTML ===
+    const box = document.getElementById('box');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const colorBtn = document.getElementById('colorBtn');
+
+    // Змінні під анімації
+    let position = 10;
+    let direction = 1;
+    let animationId = null;
+
+    // Функція для руху квадрату
+    function moveBox() {
+      position += direction * 1.5; // змінення позиції
+      box.style.left = position + '%'; // оновлення стиля
+      if (position >= 80 || position <= 10) direction *= -1; // змінення напрямку
+      animationId = requestAnimationFrame(moveBox); // виклик заново
+    }
+
+    // Кнопки керування старт стоп колір
+    startBtn.addEventListener('click', () => {
+      if (!animationId) moveBox(); // !animationid перевірка
+    });
+
+    stopBtn.addEventListener('click', () => {
+      cancelAnimationFrame(animationId); // зупинка руху
+      animationId = null;
+    });
+
+    colorBtn.addEventListener('click', () => {
+      const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+      box.style.backgroundColor = randomColor; // змінення кольору
+    });
+  </script>
+</body>
+</html>
